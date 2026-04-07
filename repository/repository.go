@@ -1,0 +1,19 @@
+// repository/repository.go
+package repository
+
+import (
+	"fee-reminder/db"
+	"fee-reminder/model"
+)
+
+type RepositoryInterface interface {
+	AddMembers(members []model.MemebersDB) error
+}
+
+type Repository struct {
+	db db.DBInterface
+}
+
+func InitializeRepository(db db.DBInterface) *Repository {
+	return &Repository{db: db}
+}

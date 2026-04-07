@@ -1,0 +1,16 @@
+// service/service.go
+package service
+
+import "fee-reminder/repository"
+
+type ServiceInterface interface {
+	AddMembersFromCSV(csvData []byte) error
+}
+
+type Service struct {
+	repository repository.RepositoryInterface
+}
+
+func InitializeService(repository repository.RepositoryInterface) *Service {
+	return &Service{repository: repository}
+}
