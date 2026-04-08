@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-func (repo *Repository) AddMembers(members []model.MemebersDB) error {
+func (repo *Repository) AddMembers(members []model.Members) error {
 	if len(members) == 0 {
 		return nil
 	}

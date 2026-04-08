@@ -1,6 +1,6 @@
 package model
 
-type MemebersDB struct {
+type Members struct {
 	Name        string `json:"name"`
 	Phone       string `json:"phone"`
 	JoiningDate string `json:"joining_date"`
