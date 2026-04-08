@@ -66,3 +66,17 @@ func (controller *Controller) AddMembersFromCSV(ctx *gin.Context) {
 		"message": "Members added successfully",
 	})
 }
+
+func (controller *Controller) GetAllMembers(ctx *gin.Context) {
+	members, err := controller.service.GetAllMembers()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error retrieving members from the database",
+		})
+		log.Printf("in controller.GetAllMembers(): error retrieving members: %v", err)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": members,
+	})
+}

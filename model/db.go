@@ -1,9 +1,16 @@
 package model
 
-type Members struct {
+type MembersDB struct {
 	Name        string `json:"name"`
 	Phone       string `json:"phone"`
 	JoiningDate string `json:"joining_date"`
 	Duration    int64  `json:"duration"`
 	ExpiryDate  int64  `json:"expiry_date"`
+}
+
+type Members struct {
+	Name        string `json:"name"`
+	Phone       string `json:"phone"`
+	JoiningDate string `json:"joining_date"`
+	Duration    int64  `json:"duration"`
 }

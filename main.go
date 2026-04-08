@@ -25,6 +25,7 @@ func main() {
 	service := service.InitializeService(repository)
 	controller := controller.InitializeController(service)
 
+	router.GET("/members", controller.GetAllMembers)
 	router.POST("/addMembersBulk", controller.AddMembersFromCSV)
 	router.Run(":8080")
 }
