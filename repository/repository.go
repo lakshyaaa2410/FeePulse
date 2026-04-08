@@ -7,7 +7,7 @@ import (
 )
 
 type RepositoryInterface interface {
-	AddMembers(members []model.MemebersDB) error
+	AddMembers(members []model.Members) error
 }
 
 type Repository struct {

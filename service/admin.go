@@ -26,7 +26,7 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 		return fmt.Errorf("in service.AddMembersFromCSV(): CSV file must contain at least 4 columns: Name, Joining Date, Phone, Duration")
 	}
 
-	var members []model.MemebersDB
+	var members []model.Members
 
 	// 2. Process each record and add members to the database
 	for _, row := range records[1:] {
@@ -44,7 +44,7 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 		// Calculate expiry date based on joining date and duration
 		expiryDate := calculateExpiryDate(joiningDate, duration)
 
-		members = append(members, model.MemebersDB{
+		members = append(members, model.Members{
 			Name:        name,
 			Phone:       phone,
 			JoiningDate: joiningDate,
