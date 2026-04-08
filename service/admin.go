@@ -26,7 +26,7 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 		return fmt.Errorf("in service.AddMembersFromCSV(): CSV file must contain at least 4 columns: Name, Joining Date, Phone, Duration")
 	}
 
-	var members []model.Members
+	var members []model.MembersDB
 
 	// 2. Process each record and add members to the database
 	for _, row := range records[1:] {
@@ -44,7 +44,7 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 		// Calculate expiry date based on joining date and duration
 		expiryDate := calculateExpiryDate(joiningDate, duration)
 
-		members = append(members, model.Members{
+		members = append(members, model.MembersDB{
 			Name:        name,
 			Phone:       phone,
 			JoiningDate: joiningDate,
@@ -74,4 +74,16 @@ func calculateExpiryDate(joiningDate string, duration int64) int64 {
 
 	expiryDateTime := joiningDateTime.AddDate(0, int(duration), 0)
 	return expiryDateTime.Unix()
+}
+
+func (service *Service) GetAllMembers() ([]model.Members, error) {
+
+	// 1. Fetch all members from the database
+	members, err := service.repository.GetAllMembers()
+	if err != nil {
+		return nil, fmt.Errorf("in service.GetAllMembers(): error fetching members from database: %v", err)
+	}
+
+	// 2. Return the list of members
+	return members, nil
 }

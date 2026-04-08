@@ -8,6 +8,7 @@ import (
 
 type ControllerInterface interface {
 	AddMembersFromCSV(c *gin.Context)
+	GetAllMembers(ctx *gin.Context)
 }
 
 type Controller struct {

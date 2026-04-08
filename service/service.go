@@ -1,10 +1,14 @@
 // service/service.go
 package service
 
-import "fee-reminder/repository"
+import (
+	"fee-reminder/model"
+	"fee-reminder/repository"
+)
 
 type ServiceInterface interface {
 	AddMembersFromCSV(csvData []byte) error
+	GetAllMembers() ([]model.Members, error)
 }
 
 type Service struct {

@@ -7,7 +7,8 @@ import (
 )
 
 type RepositoryInterface interface {
-	AddMembers(members []model.Members) error
+	AddMembers(members []model.MembersDB) error
+	GetAllMembers() ([]model.Members, error)
 }
 
 type Repository struct {
