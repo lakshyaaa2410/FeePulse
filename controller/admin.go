@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fee-reminder/model"
 	"io"
 	"net/http"
 	"strings"
@@ -79,4 +80,60 @@ func (controller *Controller) GetAllMembers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"data": members,
 	})
+}
+
+func (controller *Controller) AddNewMember(ctx *gin.Context) {
+
+	var member model.Members
+
+	err := ctx.BindJSON(&member)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid request body. Please provide member details in JSON format.",
+		})
+		log.Printf("in controller.AddNewMember(): error parsing request body: %v", err)
+		return
+	}
+
+	// Validating required fields
+	if member.Name == "" || member.Phone == "" || member.JoiningDate == "" || member.Duration <= 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Missing required fields. Please provide Name, Phone, JoiningDate, and Duration.",
+		})
+		log.Printf("in controller.AddNewMember(): missing required fields in request body: %+v", member)
+		return
+	}
+
+	// Validating Phone Number
+	if len(member.Phone) != 10 || !isNumeric(member.Phone) {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid phone number. Please provide a 10-digit phone number.",
+		})
+		log.Printf("in controller.AddNewMember(): invalid phone number: %s", member.Phone)
+		return
+	}
+
+	// Add the new member to the database
+	err = controller.service.AddNewMember(member)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error adding new member to the database",
+		})
+		log.Printf("in controller.AddNewMember(): error adding member to database: %v", err)
+		return
+	}
+
+	// Return success response
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Member added successfully",
+	})
+}
+
+func isNumeric(s string) bool {
+	for _, r := range s {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
 }
