@@ -27,6 +27,7 @@ func main() {
 
 	router.GET("/members", controller.GetAllMembers)
 	router.POST("/addMembersBulk", controller.AddMembersFromCSV)
+	router.POST("/addMember", controller.AddNewMember)
 	router.Run(":8080")
 }
 

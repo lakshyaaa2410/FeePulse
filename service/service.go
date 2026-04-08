@@ -9,6 +9,7 @@ import (
 type ServiceInterface interface {
 	AddMembersFromCSV(csvData []byte) error
 	GetAllMembers() ([]model.Members, error)
+	AddNewMember(member model.Members) error
 }
 
 type Service struct {
