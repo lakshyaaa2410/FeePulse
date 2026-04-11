@@ -63,6 +63,42 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 	return nil
 }
 
+func (service *Service) GetAllMembers() ([]model.Members, error) {
+
+	// 1. Fetch all members from the database
+	members, err := service.repository.GetAllMembers()
+	if err != nil {
+		return nil, fmt.Errorf("in service.GetAllMembers(): error fetching members from database: %v", err)
+	}
+
+	// 2. Return the list of members
+	return members, nil
+}
+
+func (service *Service) AddNewMember(member model.Members) error {
+
+	// 1. Create expiry date based on joining date and duration
+	expiryDate := calculateExpiryDate(member.JoiningDate, member.Duration)
+
+	// 2. Create a new member object to be added to the database
+	newMember := model.MembersDB{
+		Name:        member.Name,
+		Phone:       member.Phone,
+		JoiningDate: member.JoiningDate,
+		Duration:    member.Duration,
+		ExpiryDate:  expiryDate,
+	}
+
+	// 3. Add the new member to the database
+	err := service.repository.AddMember(newMember)
+	if err != nil {
+		return fmt.Errorf("in service.AddNewMember(): error adding member to database: %v", err)
+	}
+
+	// 4. Return success response
+	return nil
+}
+
 func calculateExpiryDate(joiningDate string, duration int64) string {
 	ist, _ := time.LoadLocation("Asia/Kolkata")
 
@@ -74,18 +110,6 @@ func calculateExpiryDate(joiningDate string, duration int64) string {
 
 	expiryDateTime := joiningDateTime.AddDate(0, int(duration), 0)
 	return expiryDateTime.Format("02-01-2006")
-}
-
-func (service *Service) GetAllMembers() ([]model.Members, error) {
-
-	// 1. Fetch all members from the database
-	members, err := service.repository.GetAllMembers()
-	if err != nil {
-		return nil, fmt.Errorf("in service.GetAllMembers(): error fetching members from database: %v", err)
-	}
-
-	// 2. Return the list of members
-	return members, nil
 }
 
 func (service *Service) GetAllExpiringMemberships() ([]model.Members, error) {

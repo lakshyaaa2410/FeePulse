@@ -31,6 +31,7 @@ func main() {
 	
 	// POST Methods
 	router.POST("/addMembersBulk", controller.AddMembersFromCSV)
+	router.POST("/addMember", controller.AddNewMember)
 
 	router.Run(":8080")
 }
