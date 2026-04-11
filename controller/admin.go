@@ -137,3 +137,17 @@ func isNumeric(s string) bool {
 	}
 	return true
 }
+
+func (controller *Controller) GetAllExpiringMemberships(ctx *gin.Context) {
+	expiringMemberships, err := controller.service.GetAllExpiringMemberships()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Error retrieving expiring memberships from the database",
+		})
+		log.Printf("in controller.GetAllExpiringMemberships(): error retrieving expiring memberships: %v", err)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": expiringMemberships,
+	})
+}
