@@ -5,7 +5,7 @@ type MembersDB struct {
 	Phone       string `json:"phone"`
 	JoiningDate string `json:"joining_date"`
 	Duration    int64  `json:"duration"`
-	ExpiryDate  int64  `json:"expiry_date"`
+	ExpiryDate  string `json:"expiry_date"`
 }
 
 type Members struct {

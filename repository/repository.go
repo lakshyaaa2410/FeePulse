@@ -9,6 +9,7 @@ import (
 type RepositoryInterface interface {
 	AddMembers(members []model.MembersDB) error
 	GetAllMembers() ([]model.Members, error)
+	GetAllExpiringMemberships() ([]model.Members, error)
 }
 
 type Repository struct {

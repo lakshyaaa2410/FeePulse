@@ -63,17 +63,17 @@ func (service *Service) AddMembersFromCSV(csvData []byte) error {
 	return nil
 }
 
-func calculateExpiryDate(joiningDate string, duration int64) int64 {
+func calculateExpiryDate(joiningDate string, duration int64) string {
 	ist, _ := time.LoadLocation("Asia/Kolkata")
 
 	joiningDateTime, err := time.ParseInLocation("02-01-2006", joiningDate, ist)
 	if err != nil {
 		fmt.Printf("in service.calculateExpiryDate(): error parsing joining date: %v\n", err)
-		return 0
+		return ""
 	}
 
 	expiryDateTime := joiningDateTime.AddDate(0, int(duration), 0)
-	return expiryDateTime.Unix()
+	return expiryDateTime.Format("02-01-2006")
 }
 
 func (service *Service) GetAllMembers() ([]model.Members, error) {
@@ -86,4 +86,16 @@ func (service *Service) GetAllMembers() ([]model.Members, error) {
 
 	// 2. Return the list of members
 	return members, nil
+}
+
+func (service *Service) GetAllExpiringMemberships() ([]model.Members, error) {
+
+	// 1. Fetch all expiring memberships from the database
+	expiringMemberships, err := service.repository.GetAllExpiringMemberships()
+	if err != nil {
+		return nil, fmt.Errorf("in service.GetAllExpiringMemberships(): error fetching expiring memberships from database: %v", err)
+	}
+
+	// 2. Return the list of expiring memberships
+	return expiringMemberships, nil
 }
